@@ -97,9 +97,9 @@ const displayMovements = function (movements) {
 
 //Display Balance
 
-const calDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const calDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} EUR`;
 };
 
 //Display Summary
@@ -140,6 +140,13 @@ const createUsernames = function (accs) {
 
 createUsernames(accounts);
 
+//acc handler
+
+const updateUI = function (acc) {
+  displayMovements(acc.movements);
+  calDisplayBalance(acc);
+  calDisplaySummary(acc);
+};
 //Event handlers
 
 let currentAccount;
@@ -147,7 +154,7 @@ let currentAccount;
 btnLogin.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const currentAccount = accounts.find(
+  currentAccount = accounts.find(
     (acc) => acc.username === inputLoginUsername.value
   );
   console.log(currentAccount);
@@ -160,12 +167,34 @@ btnLogin.addEventListener("click", function (e) {
 
     //empty the input
     inputLoginUsername.value = inputClosePin.value = "";
-    inputLoginPin.blur();
 
     //display items here
+    updateUI(currentAccount);
+    //   displayMovements(currentAccount.movements);
+    //   calDisplayBalance(currentAccount);
+    //   calDisplaySummary(currentAccount);
+  }
+});
 
-    displayMovements(currentAccount.movements);
-    calDisplayBalance(currentAccount.movements);
-    calDisplaySummary(currentAccount);
+//btn transfer amount handler
+
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferTo.value = "";
+
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    // receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    console.log("valid");
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
   }
 });

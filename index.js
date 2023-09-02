@@ -194,7 +194,32 @@ btnTransfer.addEventListener("click", function (e) {
     receiverAcc?.username !== currentAccount.username
   ) {
     console.log("valid");
+
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
   }
+});
+
+// acc close handler
+
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+
+    console.log(index);
+
+    // to delete acc
+    accounts.splice(index, 1);
+
+    //to hide the delted acc
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = "";
 });

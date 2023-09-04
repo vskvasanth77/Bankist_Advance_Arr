@@ -88,7 +88,7 @@ const displayMovements = function (movements, sort = false) {
       i + 1
     } ${type}</div>
           
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov.toFixed(2)}</div>
         </div>
 
         `;
@@ -101,7 +101,7 @@ const displayMovements = function (movements, sort = false) {
 
 const calDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance} EUR`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)} EUR`;
 };
 
 //Display Summary
@@ -125,7 +125,7 @@ const calDisplaySummary = function (acc) {
     })
     .reduce((acc, int) => acc + int, 0);
 
-  labelSumInterest.textContent = `${interest}E`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}E`;
 };
 
 //Username creation
@@ -207,7 +207,7 @@ btnTransfer.addEventListener("click", function (e) {
 btnLoan.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (
     amount > 0 &&
